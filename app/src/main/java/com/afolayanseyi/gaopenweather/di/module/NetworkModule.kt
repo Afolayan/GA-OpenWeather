@@ -15,7 +15,6 @@ object NetworkModule {
 
     @Provides
     @Reusable
-    @JvmStatic
     fun providesImageLoader(): ImageLoader = GlideImageLoader()
 
     @Provides
@@ -24,12 +23,13 @@ object NetworkModule {
 
     @Provides
     @Reusable
-    fun provideWeatherRepository(openWeatherService: OpenWeatherService): OpenWeatherRepository =
-        OpenWeatherRepository(openWeatherService)
+    fun weatherService(retrofit: Retrofit): OpenWeatherService =
+        retrofit.create(OpenWeatherService::class.java)
 
     @Provides
     @Reusable
-    fun weatherService(retrofit: Retrofit): OpenWeatherService =
-        retrofit.create(OpenWeatherService::class.java)
+    fun provideWeatherRepository(openWeatherService: OpenWeatherService): OpenWeatherRepository =
+        OpenWeatherRepository(openWeatherService)
+
 
 }

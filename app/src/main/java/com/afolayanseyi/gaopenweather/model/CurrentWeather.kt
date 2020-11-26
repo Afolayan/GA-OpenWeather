@@ -1,56 +1,42 @@
 package com.afolayanseyi.gaopenweather.model
 
-class Coord (
-    var lon: Double = 0.0,
-    var lat: Double = 0.0
-)
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 
-class Weather {
-    var id = 0
-    var main: String? = null
-    var description: String? = null
-    var icon: String? = null
+open class CurrentWeather(
+    var name: String = "",
+    @SerializedName("feels_like")
+    var feelsLike: Double = 0.0,
+    @SerializedName("dt")
+    var date: Long = 0L,
+    var sunrise: Long = 0L,
+    var sunset: Long = 0L,
+    @SerializedName("temp")
+    var temperature: Double = 0.0,
+    var pressure: Long = 0L,
+    var humidity: Int = 0,
+    @SerializedName("dew_point")
+    var dew_point: Double = 0.0,
+    var uvi: Double = 0.0,
+    var clouds: Int = 0,
+    var visibility: Long = 0L,
+    @SerializedName("wind_speed")
+    var wind_speed: Double = 0.0,
+    @SerializedName("wind_deg")
+    var wind_deg: Double = 0.0,
+    var weather: List<Weather>? = null
+) {
+    override fun toString(): String {
+        return Gson().toJson(this).toString()
+    }
+
+    fun toCurrentWeatherUI() = CurrentWeatherUI(
+        name = name,
+        temperature = temperature,
+        feelsLike = feelsLike,
+        wind = wind_speed,
+        uvIndex = uvi,
+        humidity = humidity
+
+    )
 }
-
-class Main {
-    var temp = 0.0
-    var feels_like = 0.0
-    var temp_min = 0.0
-    var temp_max = 0.0
-    var pressure = 0
-    var humidity = 0
-}
-
-class Wind {
-    var speed = 0.0
-    var deg = 0
-}
-
-class Clouds {
-    var all = 0
-}
-
-class Sys {
-    var type = 0
-    var id = 0
-    var message = 0.0
-    var country: String? = null
-    var sunrise = 0
-    var sunset = 0
-}
-
-data class CurrentWeather(
-    var coord: Coord? = null,
-    var weather: List<Weather>? = null,
-    var base: String? = null,
-    var main: Main? = null,
-    var visibility: Int = 0,
-    var wind: Wind? = null,
-    var clouds: Clouds? = null,
-    var dt: Long = 0,
-    var sys: Sys? = null,
-    var timezone: Int = 0,
-    var id: Long = 0,
-    var name: String? = null,
-    var cod: Int = 0
-)

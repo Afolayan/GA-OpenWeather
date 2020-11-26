@@ -3,7 +3,6 @@ package com.afolayanseyi.gaopenweather.domain
 import com.afolayanseyi.gaopenweather.data.OpenWeatherRepository
 import com.afolayanseyi.gaopenweather.data.TestData
 import com.afolayanseyi.gaopenweather.network.OpenWeatherService
-import com.afolayanseyi.gaopenweather.util.API_KEY
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -13,29 +12,30 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class FetchCurrentWeatherByCityNameUseCaseTest {
+class FetchWeatherForecastUseCaseTest {
 
-    private lateinit var weatherByCityNameUseCase: FetchCurrentWeatherByCityNameUseCase
+    private lateinit var weatherForecastUseCase: FetchWeatherForecastUseCase
     private val mockRepository: OpenWeatherRepository = mock()
     private val mockWeatherService: OpenWeatherService = mock()
 
     private val cityName = "Lagos"
-    private val cityNameWeather = TestData.generateRandomCurrentWeather(cityName)
+    private val weatherForecast =
+        TestData.generateRandomWeatherForecastByCoordinates(12.0, 13.0)
 
     @Before
     fun setUp() {
-        weatherByCityNameUseCase = FetchCurrentWeatherByCityNameUseCase(
+        weatherForecastUseCase = FetchWeatherForecastUseCase(
             mockRepository
         )
     }
 
     @Test
-    fun fetchCurrentWeatherSingle_withCityName_returnCurrentWeather() {
-        whenever(mockRepository.fetchCurrentWeatherByCityName(any(), any()))
-            .thenReturn(Single.just(cityNameWeather))
-        val test = weatherByCityNameUseCase.fetchCurrentWeatherByCity(cityName).test()
+    fun fetchWeatherForecastSingle_withCoordinates_returnWeatherData() {
+        whenever(mockRepository.fetchWeatherForecastByCoordinates(any(), any(), any(), any()))
+            .thenReturn(Single.just(weatherForecast))
+        val test = weatherForecastUseCase.fetchWeatherForecast(12.0, 13.0).test()
 
-        verify(mockRepository).fetchCurrentWeatherByCityName(cityName, API_KEY)
+        verify(mockRepository).fetchWeatherForecastByCoordinates(12.0, 13.0)
 
         test.run {
             assertNoErrors()
@@ -43,7 +43,7 @@ class FetchCurrentWeatherByCityNameUseCaseTest {
             assertValueCount(1)
             val currentWeather = test.values()[0]
             Assert.assertNotNull(currentWeather)
-            Assert.assertEquals(cityName, currentWeather.name)
+            Assert.assertEquals(12.0, currentWeather.lat)
         }
     }
 }

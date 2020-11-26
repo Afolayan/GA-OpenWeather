@@ -3,21 +3,27 @@ package com.afolayanseyi.gaopenweather
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import androidx.fragment.app.Fragment
 import com.afolayanseyi.gaopenweather.di.AppComponent
 import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
-import com.afolayanseyi.gaopenweather.di.module.CoreModule
 
-class OpenWeatherApplication: Application() {
+class OpenWeatherApplication : Application() {
 
     private val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder().coreModule(CoreModule).build()
+        DaggerAppComponent.builder().application(this).build()
     }
 
     companion object {
+        var instance: OpenWeatherApplication? = null
+
         @JvmStatic
         fun appComponent(context: Context) =
             (context.applicationContext as OpenWeatherApplication).appComponent
     }
-}
 
-fun Activity.appComponent() = OpenWeatherApplication.appComponent(this)
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+        appComponent.inject(this)
+    }
+}

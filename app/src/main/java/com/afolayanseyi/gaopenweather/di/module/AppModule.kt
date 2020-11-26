@@ -3,6 +3,7 @@ package com.afolayanseyi.gaopenweather.di.module
 import android.app.Application
 import com.afolayanseyi.gaopenweather.BuildConfig
 import com.afolayanseyi.gaopenweather.R
+import com.afolayanseyi.gaopenweather.network.HttpLogger
 import com.afolayanseyi.gaopenweather.util.AppScheduler
 import com.afolayanseyi.gaopenweather.util.SchedulerInterface
 import com.google.gson.Gson
@@ -17,17 +18,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-object CoreModule {
+object AppModule {
 
     @Provides
     @Reusable
     fun provideAppScheduler(): SchedulerInterface = AppScheduler()
 
     @Provides
-    fun createClient(): OkHttpClient {
+    fun createClient(
+        httpLogger: HttpLogger
+    ): OkHttpClient {
         val okHttpClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
+            val loggingInterceptor = HttpLoggingInterceptor(httpLogger)
                 .setLevel(HttpLoggingInterceptor.Level.BODY)
             okHttpClientBuilder.addInterceptor(loggingInterceptor)
         }
@@ -39,13 +42,21 @@ object CoreModule {
     fun provideGson(): Gson = Gson()
 
     @Provides
+    @Singleton
+    fun provideHttpLogger(): HttpLogger = HttpLogger()
+
+    @Provides
     @Reusable
     fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory =
         GsonConverterFactory.create(gson)
 
     @Provides
     @Singleton
-    fun provideRetrofit(application: Application, gson: Gson, okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        application: Application,
+        gson: Gson,
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(application.getString(R.string.base_url))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
