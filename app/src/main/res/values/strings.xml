@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GA OpenWeather</string>
+    <string name="title_today">Today</string>
+    <string name="title_weekly">Weekly</string>
+    <string name="title_share">Share</string>
+    <string name="base_url">https://api.openweathermap.org/data/2.5/weather</string>
+</resources>
