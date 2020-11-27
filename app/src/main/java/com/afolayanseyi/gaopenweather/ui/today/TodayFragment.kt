@@ -7,10 +7,13 @@ import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentTodayBinding
 import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
+import com.afolayanseyi.gaopenweather.extensions.getIconUrl
 import com.afolayanseyi.gaopenweather.extensions.gone
+import com.afolayanseyi.gaopenweather.extensions.toFormattedString
 import com.afolayanseyi.gaopenweather.extensions.visible
 import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
 import com.afolayanseyi.gaopenweather.ui.BaseFragment
+import com.afolayanseyi.gaopenweather.util.DATE_FORMAT_DAY_MONTH_DAY
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,6 +23,7 @@ class TodayFragment : BaseFragment() {
 
     private var _binding: FragmentTodayBinding? = null
     private val binding get() = _binding!!
+    private val simpleDateFormat = SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,10 +94,8 @@ class TodayFragment : BaseFragment() {
         data?.let { currentWeather ->
             layout_header_view.visible()
             layout_weather_info.visible()
+            text_view_date.text = currentWeather.date.toFormattedString(DATE_FORMAT_DAY_MONTH_DAY)
 
-            text_view_date.text =
-                SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
-                    .format(Date(currentWeather.date))
             text_view_weather_description.text = currentWeather.description?.capitalize()
             currentWeather.icon?.let {
                 imageLoader.loadImage(getIconUrl(it), image_view_weather_icon)

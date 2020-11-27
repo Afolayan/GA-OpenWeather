@@ -9,8 +9,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.afolayanseyi.gaopenweather.model.Coordinates
-import com.afolayanseyi.gaopenweather.util.BASE_IMAGE_URL
-import com.afolayanseyi.gaopenweather.util.ICON
 import com.afolayanseyi.gaopenweather.util.ImageLoader
 import com.afolayanseyi.gaopenweather.util.LocationUtil
 import com.google.android.gms.location.*
@@ -37,8 +35,6 @@ abstract class BaseFragment : Fragment() {
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     private var locationRequest: LocationRequest? = null
     private var locationCallback: LocationCallback? = null
-    protected var latitude: Double = 0.0
-    protected var longitude: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,19 +79,21 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    fun getIconUrl(icon: String) = BASE_IMAGE_URL.replace(ICON, icon)
-
-    fun presentErrorDialog(title: String, message: String?, retryAction: () -> Unit) {
-        AlertDialog.Builder(requireContext())
+    fun presentErrorDialog(title: String, message: String?, retryAction: (() -> Unit?)?) {
+        val alertDialog = AlertDialog.Builder(requireContext())
             .setTitle(title)
             .setMessage(message)
             .setNegativeButton("Okay") { dialog, _ ->
                 dialog.cancel()
             }
-            .setPositiveButton("Retry") { dialog, _ ->
-                dialog.cancel()
-                retryAction.invoke()
-            }
+        retryAction?.let {
+            alertDialog
+                .setPositiveButton("Retry") { dialog, _ ->
+                    dialog.cancel()
+                    retryAction.invoke()
+                }
+        }
+        alertDialog
             .create()
             .show()
     }
@@ -135,9 +133,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun processLocation(location: Location) {
-        latitude = location.latitude
-        longitude = location.longitude
-        weatherViewModel.fetchWeatherBy(Coordinates(latitude, longitude))
+        weatherViewModel.fetchWeatherBy(Coordinates(location.latitude, location.longitude))
         weatherViewModel.coordinateAddress =
             LocationUtil.getAddressFromLocation(
                 requireContext(),
