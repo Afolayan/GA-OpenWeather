@@ -35,12 +35,17 @@ data class WeatherData(
         return Gson().toJson(this).toString()
     }
 
-    fun toFullWeeklyData(): FullWeeklyData {
-        val weeklyData: MutableList<WeekDay> = mutableListOf()
+    fun toWeatherUIData(): WeatherUIData {
+        val weeklyDataList: MutableList<WeekDay> = mutableListOf()
+        daily?.get(0)?.let {
+            val weeklyData = it.toWeeklyData()
+            weeklyData.temperature = current?.temperature
+            weeklyDataList.add(weeklyData)
+        }
         daily?.forEach {
-            weeklyData.add(it.toWeeklyData())
+            weeklyDataList.add(it.toWeeklyData())
         }
         val currentWeatherUI = current?.toCurrentWeatherUI()
-        return FullWeeklyData(weeklyData, currentWeatherUI)
+        return WeatherUIData(weeklyDataList, currentWeatherUI)
     }
 }

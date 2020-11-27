@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/spacing_normal">
+    android:layout_marginStart="@dimen/spacing_xnormal"
+    android:layout_marginTop="@dimen/spacing_normal"
+    android:layout_marginEnd="@dimen/spacing_xnormal"
+    android:layout_marginBottom="@dimen/spacing_normal">
 
     <ImageView
         android:id="@+id/image_view_weather_icon"
@@ -19,8 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@id/image_view_weather_icon"
-        app:layout_constraintGuide_begin="40dp" />
+        app:layout_constraintGuide_begin="40dp"
+        app:layout_constraintStart_toEndOf="@id/image_view_weather_icon" />
 
     <TextView
         android:id="@+id/text_view_day"
@@ -39,8 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@id/text_view_day"
-        app:layout_constraintGuide_begin="90dp" />
+        app:layout_constraintGuide_begin="90dp"
+        app:layout_constraintStart_toEndOf="@id/text_view_day" />
 
     <TextView
         android:id="@+id/text_view_temperatures"
@@ -60,14 +63,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@id/text_view_temperatures"
-        app:layout_constraintGuide_begin="170dp" />
+        app:layout_constraintGuide_begin="160dp"
+        app:layout_constraintStart_toEndOf="@id/text_view_temperatures" />
 
     <TextView
         android:id="@+id/text_view_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_normal"
         android:textColor="@color/text_value_grey"
         android:textSize="@dimen/text_size_normal"
@@ -79,7 +82,9 @@
         android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:background="@color/view_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_description" />

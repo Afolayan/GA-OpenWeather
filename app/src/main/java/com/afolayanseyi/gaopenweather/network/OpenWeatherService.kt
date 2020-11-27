@@ -7,14 +7,14 @@ import retrofit2.http.Query
 
 interface OpenWeatherService {
     companion object {
-        const val QUERY_KEY = "q"
         const val APPLICATION_ID = "appid"
         const val LATITUDE = "lat"
         const val LONGITUDE = "lon"
         const val EXCLUDE = "exclude"
-        const val WEATHER = "weather"
+        const val UNITS = "units"
         const val ONECALL = "onecall"
-        const val HOURLY = "hourly"
+        const val EXCLUDE_LIST = "hourly,minutely"
+        const val METRIC = "metric"
     }
 
     @GET(ONECALL)
@@ -23,6 +23,6 @@ interface OpenWeatherService {
         @Query(LONGITUDE) longitude: Double?,
         @Query(EXCLUDE) exclude: String?,
         @Query(APPLICATION_ID) apiKey: String?,
-        @Query("units") units: String? = "metric"
+        @Query(UNITS) units: String?
     ): Single<WeatherData>
 }

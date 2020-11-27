@@ -1,7 +1,6 @@
 package com.afolayanseyi.gaopenweather.ui.weekly
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,11 @@ import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentWeeklyBinding
 import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
-import com.afolayanseyi.gaopenweather.extensions.getIconUrl
-import com.afolayanseyi.gaopenweather.extensions.toFormattedString
-import com.afolayanseyi.gaopenweather.model.FullWeeklyData
+import com.afolayanseyi.gaopenweather.extensions.gone
+import com.afolayanseyi.gaopenweather.extensions.visible
+import com.afolayanseyi.gaopenweather.model.WeatherUIData
 import com.afolayanseyi.gaopenweather.model.WeekDay
 import com.afolayanseyi.gaopenweather.ui.BaseFragment
-import com.afolayanseyi.gaopenweather.util.DATE_FORMAT_DAY_MONTH_DAY
 import kotlinx.android.synthetic.main.fragment_weekly.*
 
 class WeeklyFragment : BaseFragment() {
@@ -24,11 +22,14 @@ class WeeklyFragment : BaseFragment() {
 
     private val binding get() = _binding!!
 
+    private lateinit var weekWeatherAdapter: WeekWeatherAdapter
+    private var itemList = mutableListOf<WeekDay>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         DaggerAppComponent.builder()
             .application(OpenWeatherApplication.instance!!)
             .build()
@@ -37,17 +38,22 @@ class WeeklyFragment : BaseFragment() {
         _binding = FragmentWeeklyBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        weekWeatherAdapter =
+            WeekWeatherAdapter(itemList, weatherViewModel.coordinateAddress, imageLoader)
         weatherViewModel.weatherForecastLiveData.observe(viewLifecycleOwner, { resource ->
             resource?.let {
                 when (it.state) {
                     ResourceState.LOADING -> {
-                        Log.e("WEEK", "loading")
+                        progress_circular.visible()
+                        recycler_view.gone()
                     }
                     ResourceState.SUCCESS -> {
+                        progress_circular.gone()
                         presentView(it.data)
                     }
 
                     ResourceState.ERROR -> {
+                        progress_circular.gone()
                         presentErrorDialog("Error", it.exception?.message, null)
                     }
                 }
@@ -55,25 +61,16 @@ class WeeklyFragment : BaseFragment() {
         })
 
         weatherViewModel.addressLiveData.observe(viewLifecycleOwner, {
-            text_view_place_name.text = it
+            weekWeatherAdapter.notifyDataSetChanged()
         })
 
         return root
     }
 
-    private fun presentView(data: FullWeeklyData?) {
+    private fun presentView(data: WeatherUIData?) {
+        recycler_view.visible()
         data?.let { weeklyData ->
-            weeklyData.currentWeatherUI?.let { currentWeather ->
-                text_view_date.text =
-                    currentWeather.date.toFormattedString(DATE_FORMAT_DAY_MONTH_DAY)
-                text_view_weather_description.text = currentWeather.description?.capitalize()
-                weeklyData.currentWeatherUI?.icon?.let {
-                    imageLoader.loadImage(getIconUrl(it), image_view_weather_icon)
-                }
-                text_view_temperature.text = currentWeather.temperature?.toInt()?.toString()
-            }
             recycler_view.apply {
-                val itemList = mutableListOf<WeekDay>()
                 weeklyData.weeklyData?.filter {
                     it.date > 0
                 }?.iterator()?.let {
@@ -81,7 +78,7 @@ class WeeklyFragment : BaseFragment() {
                         itemList.add(dailyItem)
                     }
                 }
-                adapter = WeekWeatherAdapter(itemList, imageLoader)
+                adapter = weekWeatherAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
         }

@@ -18,7 +18,6 @@ class FetchWeatherForecastUseCaseTest {
     private val mockRepository: OpenWeatherRepository = mock()
     private val mockWeatherService: OpenWeatherService = mock()
 
-    private val cityName = "Lagos"
     private val weatherForecast =
         TestData.generateRandomWeatherForecastByCoordinates(12.0, 13.0)
 
@@ -31,7 +30,7 @@ class FetchWeatherForecastUseCaseTest {
 
     @Test
     fun fetchWeatherForecastSingle_withCoordinates_returnWeatherData() {
-        whenever(mockRepository.fetchWeatherForecastByCoordinates(any(), any(), any(), any()))
+        whenever(mockRepository.fetchWeatherForecastByCoordinates(any(), any(), any(), any(), any()))
             .thenReturn(Single.just(weatherForecast))
         val test = weatherForecastUseCase.fetchWeatherForecast(12.0, 13.0).test()
 

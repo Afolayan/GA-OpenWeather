@@ -6,20 +6,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_scrollFlags="scroll|enterAlways" />
-
     <ProgressBar
         android:id="@+id/progress_circular"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/progress_bar_dimension"
+        android:layout_height="@dimen/progress_bar_dimension"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

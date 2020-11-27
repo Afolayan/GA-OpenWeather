@@ -1,7 +1,8 @@
 package com.afolayanseyi.gaopenweather.data
 
 import com.afolayanseyi.gaopenweather.network.OpenWeatherService
-import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.HOURLY
+import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.EXCLUDE_LIST
+import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.METRIC
 import com.afolayanseyi.gaopenweather.util.API_KEY
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -25,7 +26,7 @@ class OpenWeatherRepositoryTest : PowerMockTestCase() {
 
     @BeforeTest
     fun init() {
-        initMocks(this);
+        initMocks(this)
     }
 
     @Before
@@ -37,14 +38,21 @@ class OpenWeatherRepositoryTest : PowerMockTestCase() {
 
     @Test
     fun fetchWeatherForecast_withCoordinates_returnSuccess() {
-        whenever(repository.fetchWeatherForecastByCoordinates(any(), any(), any(), any()))
+        whenever(repository.fetchWeatherForecastByCoordinates(any(), any(), any(), any(), any()))
             .thenReturn(Single.just(weatherForecast))
         val latitude = 12.0
         val longitude = 13.0
-        repository.fetchWeatherForecastByCoordinates(latitude, longitude, HOURLY, API_KEY).test()
+        repository.fetchWeatherForecastByCoordinates(latitude, longitude, EXCLUDE_LIST, API_KEY)
+            .test()
             ?.let {
                 assert(latitude == weatherForecast.lat)
             }
-        verify(openWeatherService).getForecastByCoordinates(latitude, longitude, HOURLY, API_KEY)
+        verify(openWeatherService).getForecastByCoordinates(
+            latitude,
+            longitude,
+            EXCLUDE_LIST,
+            API_KEY,
+            METRIC
+        )
     }
 }

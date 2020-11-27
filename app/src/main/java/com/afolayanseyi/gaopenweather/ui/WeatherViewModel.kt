@@ -11,7 +11,7 @@ import com.afolayanseyi.gaopenweather.extensions.setLoading
 import com.afolayanseyi.gaopenweather.extensions.setSuccess
 import com.afolayanseyi.gaopenweather.model.Coordinates
 import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
-import com.afolayanseyi.gaopenweather.model.FullWeeklyData
+import com.afolayanseyi.gaopenweather.model.WeatherUIData
 import com.afolayanseyi.gaopenweather.util.LocationUtil
 import com.afolayanseyi.gaopenweather.util.SchedulerInterface
 import javax.inject.Inject
@@ -24,11 +24,11 @@ class WeatherViewModel @Inject constructor(
     private val _currentWeatherLiveData = MutableLiveData<Resource<CurrentWeatherUI>>()
     val currentWeatherLiveData = _currentWeatherLiveData
 
-    private val _weatherForecastLiveData = MutableLiveData<Resource<FullWeeklyData>>()
+    private val _weatherForecastLiveData = MutableLiveData<Resource<WeatherUIData>>()
     val weatherForecastLiveData = _weatherForecastLiveData
     val addressLiveData = MutableLiveData<String>()
 
-    var coordinateAddress: String? = null
+    var coordinateAddress: String? = ""
 
     fun fetchWeatherBy(coordinates: Coordinates) {
         addDisposable(
@@ -46,7 +46,7 @@ class WeatherViewModel @Inject constructor(
                         it.current?.let { current ->
                             _currentWeatherLiveData.setSuccess(current.toCurrentWeatherUI())
                         }
-                        _weatherForecastLiveData.setSuccess(it.toFullWeeklyData())
+                        _weatherForecastLiveData.setSuccess(it.toWeatherUIData())
                     }
 
                 }, {
@@ -64,6 +64,7 @@ class WeatherViewModel @Inject constructor(
                 .subscribeOn(appScheduler.io())
                 .observeOn(appScheduler.mainThread())
                 .subscribe({
+                    coordinateAddress = it
                     addressLiveData.postValue(it)
                 }, {
 

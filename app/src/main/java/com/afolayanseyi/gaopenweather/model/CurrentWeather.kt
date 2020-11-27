@@ -32,7 +32,6 @@ open class CurrentWeather(
 
     fun toCurrentWeatherUI() = CurrentWeatherUI(
         date = date,
-        name = name,
         temperature = temperature,
         feelsLike = feelsLike,
         wind = wind_speed,

@@ -1,7 +1,6 @@
 package com.afolayanseyi.gaopenweather.model
 
 data class CurrentWeatherUI(
-    var name: String? = "",
     var icon: String? = "",
     var description: String? = "",
     var temperature: Double? = 0.0,
@@ -16,11 +15,12 @@ data class WeekDay(
     var date: Long,
     var minTemp: Double?,
     var maxTemp: Double?,
+    var temperature: Double? = 0.0,
     var description: String? = "",
     var icon: String? = ""
 )
 
-data class FullWeeklyData(
+data class WeatherUIData(
     var weeklyData: List<WeekDay>?,
     var currentWeatherUI: CurrentWeatherUI?
 )
