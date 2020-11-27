@@ -1,15 +1,12 @@
 package com.afolayanseyi.gaopenweather.ui.today
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.data.ResourceState
@@ -106,14 +103,6 @@ class TodayFragment : BaseFragment() {
         searchEditText.setHintTextColor(Color.LTGRAY)
         val searchPlate: View? = searchView.findViewById(androidx.appcompat.R.id.search_plate)
         searchPlate?.setBackgroundResource(R.drawable.searchview_background)
-
-        val closeButtonImage: ImageView? = searchView.findViewById(androidx.appcompat.R.id.search_close_btn)
-        closeButtonImage?.setColorFilter(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.white
-            ), PorterDuff.Mode.SRC_IN
-        )
     }
 
     override fun onDestroyView() {
