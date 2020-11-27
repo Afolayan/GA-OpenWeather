@@ -1,4 +1,4 @@
-package com.afolayanseyi.gaopenweather.util
+package com.afolayanseyi.gaopenweather.imageloader
 
 import android.widget.ImageView
 

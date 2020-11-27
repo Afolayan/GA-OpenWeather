@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.afolayanseyi.gaopenweather.model.Coordinates
-import com.afolayanseyi.gaopenweather.util.ImageLoader
+import com.afolayanseyi.gaopenweather.imageloader.ImageLoader
 import com.google.android.gms.location.*
 import javax.inject.Inject
 

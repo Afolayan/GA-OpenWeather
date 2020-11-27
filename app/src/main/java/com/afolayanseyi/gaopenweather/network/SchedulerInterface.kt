@@ -1,4 +1,4 @@
-package com.afolayanseyi.gaopenweather.util
+package com.afolayanseyi.gaopenweather.network
 
 import io.reactivex.Scheduler
 

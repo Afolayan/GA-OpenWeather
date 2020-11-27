@@ -24,10 +24,10 @@ data class Coordinates(
 )
 
 data class WeatherData(
-    var lat: Double = 0.0,
-    var lon: Double = 0.0,
+    var lat: Double? = 0.0,
+    var lon: Double? = 0.0,
     var timezone: String? = null,
-    var timezone_offset: Int = 0,
+    var timezone_offset: Int? = 0,
     var current: CurrentWeather? = null,
     var daily: List<DailyData>? = null
 ) {
@@ -37,13 +37,15 @@ data class WeatherData(
 
     fun toWeatherUIData(): WeatherUIData {
         val weeklyDataList: MutableList<WeekDay> = mutableListOf()
-        daily?.get(0)?.let {
-            val weeklyData = it.toWeeklyData()
-            weeklyData.temperature = current?.temperature
-            weeklyDataList.add(weeklyData)
-        }
-        daily?.forEach {
-            weeklyDataList.add(it.toWeeklyData())
+        daily?.run {
+            get(0).let {
+                val weeklyData = it.toWeeklyData()
+                weeklyData.temperature = current?.temperature
+                weeklyDataList.add(weeklyData)
+            }
+            for (i in 1 until size) {
+                weeklyDataList.add(get(i).toWeeklyData())
+            }
         }
         val currentWeatherUI = current?.toCurrentWeatherUI()
         return WeatherUIData(weeklyDataList, currentWeatherUI)

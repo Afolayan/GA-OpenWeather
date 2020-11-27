@@ -6,15 +6,15 @@ import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.METRI
 import com.afolayanseyi.gaopenweather.util.API_KEY
 import javax.inject.Inject
 
-class FetchWeatherForecastUseCase @Inject constructor(
+open class FetchWeatherForecastUseCase @Inject constructor(
     private val repository: OpenWeatherRepository
 ) {
-    fun fetchWeatherForecast(
-        latitude: Double,
-        longitude: Double,
-        exclude: String = EXCLUDE_LIST,
-        apiKey: String = API_KEY,
-        unit: String = METRIC
+    open fun fetchWeatherForecast(
+        latitude: Double? = 0.0,
+        longitude: Double? = 0.0,
+        exclude: String? = EXCLUDE_LIST,
+        apiKey: String? = API_KEY,
+        unit: String? = METRIC
     ) =
         repository.fetchWeatherForecastByCoordinates(latitude, longitude, exclude, apiKey, unit)
 }

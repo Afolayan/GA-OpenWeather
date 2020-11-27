@@ -21,7 +21,8 @@ class OpenWeatherRepositoryTest : PowerMockTestCase() {
     private val throwable = Throwable()
 
     companion object {
-        val weatherForecast = TestData.generateRandomWeatherForecastByCoordinates(12.0, 13.0)
+        val weatherForecast =
+            TestData.generateRandomWeatherForecastByCoordinates(12.0, 13.0)
     }
 
     @BeforeTest
@@ -42,11 +43,15 @@ class OpenWeatherRepositoryTest : PowerMockTestCase() {
             .thenReturn(Single.just(weatherForecast))
         val latitude = 12.0
         val longitude = 13.0
-        repository.fetchWeatherForecastByCoordinates(latitude, longitude, EXCLUDE_LIST, API_KEY)
-            .test()
-            ?.let {
-                assert(latitude == weatherForecast.lat)
-            }
+        val test =
+            repository.fetchWeatherForecastByCoordinates(latitude, longitude, EXCLUDE_LIST, API_KEY)
+                ?.test()
+
+        test?.run {
+            assertNoErrors()
+            assertValueCount(1)
+            assertValue(weatherForecast)
+        }
         verify(openWeatherService).getForecastByCoordinates(
             latitude,
             longitude,
@@ -54,5 +59,30 @@ class OpenWeatherRepositoryTest : PowerMockTestCase() {
             API_KEY,
             METRIC
         )
+
+    }
+
+    @Test
+    fun fetchWeatherForecast_withCoordinates_returnException() {
+        whenever(repository.fetchWeatherForecastByCoordinates(any(), any(), any(), any(), any()))
+            .thenReturn(Single.error(throwable))
+        val latitude = 12.0
+        val longitude = 13.0
+        val test =
+            repository.fetchWeatherForecastByCoordinates(latitude, longitude, EXCLUDE_LIST, API_KEY)
+                ?.test()
+        test?.run {
+            assertNoValues()
+            assertNotComplete()
+            assertError(throwable)
+        }
+        verify(openWeatherService).getForecastByCoordinates(
+            latitude,
+            longitude,
+            EXCLUDE_LIST,
+            API_KEY,
+            METRIC
+        )
+
     }
 }

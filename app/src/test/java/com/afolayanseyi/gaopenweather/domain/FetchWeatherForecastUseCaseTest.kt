@@ -3,6 +3,9 @@ package com.afolayanseyi.gaopenweather.domain
 import com.afolayanseyi.gaopenweather.data.OpenWeatherRepository
 import com.afolayanseyi.gaopenweather.data.TestData
 import com.afolayanseyi.gaopenweather.network.OpenWeatherService
+import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.EXCLUDE_LIST
+import com.afolayanseyi.gaopenweather.network.OpenWeatherService.Companion.UNITS
+import com.afolayanseyi.gaopenweather.util.API_KEY
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -15,7 +18,7 @@ import org.junit.Test
 class FetchWeatherForecastUseCaseTest {
 
     private lateinit var weatherForecastUseCase: FetchWeatherForecastUseCase
-    private val mockRepository: OpenWeatherRepository = mock()
+    private lateinit var mockRepository: OpenWeatherRepository
     private val mockWeatherService: OpenWeatherService = mock()
 
     private val weatherForecast =
@@ -23,6 +26,7 @@ class FetchWeatherForecastUseCaseTest {
 
     @Before
     fun setUp() {
+        mockRepository = OpenWeatherRepository(mockWeatherService)
         weatherForecastUseCase = FetchWeatherForecastUseCase(
             mockRepository
         )
@@ -30,13 +34,30 @@ class FetchWeatherForecastUseCaseTest {
 
     @Test
     fun fetchWeatherForecastSingle_withCoordinates_returnWeatherData() {
-        whenever(mockRepository.fetchWeatherForecastByCoordinates(any(), any(), any(), any(), any()))
+        whenever(
+            mockRepository.fetchWeatherForecastByCoordinates(
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        )
             .thenReturn(Single.just(weatherForecast))
-        val test = weatherForecastUseCase.fetchWeatherForecast(12.0, 13.0).test()
+        val test = weatherForecastUseCase.fetchWeatherForecast(
+            12.0, 13.0,
+            EXCLUDE_LIST, API_KEY, UNITS
+        )?.test()
 
-        verify(mockRepository).fetchWeatherForecastByCoordinates(12.0, 13.0)
+        verify(mockWeatherService).getForecastByCoordinates(
+            12.0,
+            13.0,
+            EXCLUDE_LIST,
+            API_KEY,
+            UNITS
+        )
 
-        test.run {
+        test?.run {
             assertNoErrors()
             assertComplete()
             assertValueCount(1)

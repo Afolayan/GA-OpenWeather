@@ -12,8 +12,8 @@ import com.afolayanseyi.gaopenweather.extensions.setSuccess
 import com.afolayanseyi.gaopenweather.model.Coordinates
 import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
 import com.afolayanseyi.gaopenweather.model.WeatherUIData
+import com.afolayanseyi.gaopenweather.network.SchedulerInterface
 import com.afolayanseyi.gaopenweather.util.LocationUtil
-import com.afolayanseyi.gaopenweather.util.SchedulerInterface
 import javax.inject.Inject
 
 class WeatherViewModel @Inject constructor(
@@ -31,28 +31,28 @@ class WeatherViewModel @Inject constructor(
     var coordinateAddress: String? = ""
 
     fun fetchWeatherBy(coordinates: Coordinates) {
-        addDisposable(
-            fetchWeatherForecastUseCase.fetchWeatherForecast(
-                coordinates.lat,
-                coordinates.lon
-            ).doOnSubscribe {
-                _currentWeatherLiveData.setLoading()
-                _weatherForecastLiveData.setLoading()
-            }
-                .subscribeOn(appScheduler.io())
-                .observeOn(appScheduler.mainThread())
-                .subscribe({
-                    it?.let {
-                        it.current?.let { current ->
-                            _currentWeatherLiveData.setSuccess(current.toCurrentWeatherUI())
+        fetchWeatherForecastUseCase.fetchWeatherForecast(
+            coordinates.lat,
+            coordinates.lon
+        )?.doOnSubscribe {
+            _currentWeatherLiveData.setLoading()
+            _weatherForecastLiveData.setLoading()
+        }?.subscribeOn(appScheduler.io())
+            ?.observeOn(appScheduler.mainThread())?.let {
+                addDisposable(
+                    it.subscribe({
+                        it?.let {
+                            it.current?.let { current ->
+                                _currentWeatherLiveData.setSuccess(current.toCurrentWeatherUI())
+                            }
+                            _weatherForecastLiveData.setSuccess(it.toWeatherUIData())
                         }
-                        _weatherForecastLiveData.setSuccess(it.toWeatherUIData())
-                    }
 
-                }, {
-                    _weatherForecastLiveData.setError(Exception(it.message))
-                })
-        )
+                    }, {
+                        _weatherForecastLiveData.setError(Exception(it.message))
+                    })
+                )
+            }
     }
 
     fun fetchLocationAddress(latitude: Double, longitude: Double) {

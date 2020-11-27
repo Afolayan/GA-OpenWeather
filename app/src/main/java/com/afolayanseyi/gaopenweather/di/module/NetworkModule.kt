@@ -2,8 +2,8 @@ package com.afolayanseyi.gaopenweather.di.module
 
 import com.afolayanseyi.gaopenweather.data.OpenWeatherRepository
 import com.afolayanseyi.gaopenweather.network.OpenWeatherService
-import com.afolayanseyi.gaopenweather.util.GlideImageLoader
-import com.afolayanseyi.gaopenweather.util.ImageLoader
+import com.afolayanseyi.gaopenweather.imageloader.GlideImageLoader
+import com.afolayanseyi.gaopenweather.imageloader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

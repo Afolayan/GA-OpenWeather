@@ -6,7 +6,7 @@ import com.afolayanseyi.gaopenweather.di.module.AppModule
 import com.afolayanseyi.gaopenweather.di.module.NetworkModule
 import com.afolayanseyi.gaopenweather.ui.today.TodayFragment
 import com.afolayanseyi.gaopenweather.ui.weekly.WeeklyFragment
-import com.afolayanseyi.gaopenweather.util.SchedulerInterface
+import com.afolayanseyi.gaopenweather.network.SchedulerInterface
 import com.google.gson.Gson
 import dagger.BindsInstance
 import dagger.Component

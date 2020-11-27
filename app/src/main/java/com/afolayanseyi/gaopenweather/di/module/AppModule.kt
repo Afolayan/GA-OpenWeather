@@ -4,8 +4,8 @@ import android.app.Application
 import com.afolayanseyi.gaopenweather.BuildConfig
 import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.network.HttpLogger
-import com.afolayanseyi.gaopenweather.util.AppScheduler
-import com.afolayanseyi.gaopenweather.util.SchedulerInterface
+import com.afolayanseyi.gaopenweather.network.AppScheduler
+import com.afolayanseyi.gaopenweather.network.SchedulerInterface
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

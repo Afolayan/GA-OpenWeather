@@ -12,7 +12,7 @@ import com.afolayanseyi.gaopenweather.extensions.visible
 import com.afolayanseyi.gaopenweather.model.WeekDay
 import com.afolayanseyi.gaopenweather.util.DATE_FORMAT_DAY_MONTH_DAY
 import com.afolayanseyi.gaopenweather.util.DATE_FORMAT_DAY_ONLY
-import com.afolayanseyi.gaopenweather.util.ImageLoader
+import com.afolayanseyi.gaopenweather.imageloader.ImageLoader
 import kotlinx.android.synthetic.main.item_daily_weather_forecast.view.*
 import kotlinx.android.synthetic.main.item_daily_weather_forecast.view.image_view_weather_icon
 import kotlinx.android.synthetic.main.item_weekly_header_layout.view.*
