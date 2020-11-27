@@ -16,4 +16,5 @@
     <string name="error_message">Error fetching weather data</string>
     <string name="today">Today</string>
     <string name="temperature_data">%1$d\u00B0/%2$d\u00B0</string>
+    <string name="search_hint">Search here</string>
 </resources>

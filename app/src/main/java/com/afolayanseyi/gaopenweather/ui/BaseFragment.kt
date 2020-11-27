@@ -8,13 +8,18 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.afolayanseyi.gaopenweather.model.Coordinates
 import com.afolayanseyi.gaopenweather.imageloader.ImageLoader
-import com.google.android.gms.location.*
+import com.afolayanseyi.gaopenweather.model.Coordinates
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
 
 
 const val REQUEST_CODE_LOCATION_PERMISSION = 200
+const val LOCATION_UPDATE_INTERVAL = 20 * 60 * 1000L
 
 abstract class BaseFragment : Fragment() {
 
@@ -40,7 +45,7 @@ abstract class BaseFragment : Fragment() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = (20 * 60 * 1000).toLong()
+            interval = LOCATION_UPDATE_INTERVAL
         }
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -133,7 +138,6 @@ abstract class BaseFragment : Fragment() {
 
     private fun processLocation(location: Location) {
         weatherViewModel.fetchWeatherBy(Coordinates(location.latitude, location.longitude))
-        weatherViewModel.fetchLocationAddress(location.latitude, location.longitude)
 }
 
 }

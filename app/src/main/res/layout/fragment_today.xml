@@ -32,9 +32,8 @@
         android:layout_height="0dp"
         android:layout_marginBottom="200dp"
         android:background="@drawable/weather_background"
-        android:paddingStart="@dimen/spacing_medium"
-        android:paddingTop="?actionBarSize"
-        android:paddingEnd="@dimen/spacing_medium"
+        android:paddingStart="@dimen/spacing_normal"
+        android:paddingEnd="@dimen/spacing_normal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,20 +41,31 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:searchIcon="@drawable/ic_search" />
+
         <TextView
             android:id="@+id/text_view_place_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_normal"
-            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_marginTop="30dp"
             android:ellipsize="end"
-            android:maxLines="1"
             android:maxEms="20"
+            android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_large"
             app:layout_constraintEnd_toStartOf="@id/guideline1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
             tools:text="New Delhi" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -94,16 +104,17 @@
             android:id="@+id/image_view_weather_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginEnd="@dimen/spacing_xnormal"
             android:src="@drawable/ic_cloudy_sun"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_view_place_name"
             app:tint="@color/white" />
 
         <TextView
             android:id="@+id/text_view_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginStart="@dimen/spacing_normal"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginBottom="@dimen/spacing_xxnormal"
             android:textColor="@color/white"

@@ -46,6 +46,10 @@ class WeatherViewModel @Inject constructor(
                                 _currentWeatherLiveData.setSuccess(current.toCurrentWeatherUI())
                             }
                             _weatherForecastLiveData.setSuccess(it.toWeatherUIData())
+                            fetchLocationAddress(
+                                coordinates.lat,
+                                coordinates.lon
+                            )
                         }
 
                     }, {
@@ -55,7 +59,7 @@ class WeatherViewModel @Inject constructor(
             }
     }
 
-    fun fetchLocationAddress(latitude: Double, longitude: Double) {
+    private fun fetchLocationAddress(latitude: Double, longitude: Double) {
         addDisposable(
             LocationUtil.getAddressFromLocation(
                 OpenWeatherApplication.instance!!,
@@ -69,6 +73,24 @@ class WeatherViewModel @Inject constructor(
                 }, {
 
                 })
+        )
+    }
+
+    fun getLocationFromAddress(inputAddress: String) {
+        addDisposable(
+            LocationUtil.getLocationFromAddress(
+                inputAddress
+            )
+                .subscribeOn(appScheduler.io())
+                .observeOn(appScheduler.mainThread())
+                .subscribe { latLng ->
+                    val lat = latLng.latitude
+                    val lon = latLng.longitude
+                    if (lat > 0 && lon > 0) {
+                        // fetch weather for lat and lng
+                        fetchWeatherBy(Coordinates(lat, lon))
+                    }
+                }
         )
     }
 }

@@ -1,7 +1,15 @@
 package com.afolayanseyi.gaopenweather.ui.today
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.data.ResourceState
@@ -15,15 +23,12 @@ import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
 import com.afolayanseyi.gaopenweather.ui.BaseFragment
 import com.afolayanseyi.gaopenweather.util.DATE_FORMAT_DAY_MONTH_DAY
 import kotlinx.android.synthetic.main.fragment_today.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class TodayFragment : BaseFragment() {
 
     private var _binding: FragmentTodayBinding? = null
     private val binding get() = _binding!!
-    private val simpleDateFormat = SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,19 +79,41 @@ class TodayFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //_binding?.toolbar.action
+        customiseSearchView()
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    handleAddressSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    handleAddressSearch(it)
+                }
+                return true
+            }
+
+        })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-    }
+    private fun customiseSearchView() {
+        val searchView = search_view
+        val searchEditText =
+            searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        searchEditText.setTextColor(Color.BLACK)
+        searchEditText.setHintTextColor(Color.LTGRAY)
+        val searchPlate: View? = searchView.findViewById(androidx.appcompat.R.id.search_plate)
+        searchPlate?.setBackgroundResource(R.drawable.searchview_background)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-
-        }
-        return super.onOptionsItemSelected(item)
+        val closeButtonImage: ImageView? = searchView.findViewById(androidx.appcompat.R.id.search_close_btn)
+        closeButtonImage?.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.white
+            ), PorterDuff.Mode.SRC_IN
+        )
     }
 
     override fun onDestroyView() {
@@ -124,4 +151,13 @@ class TodayFragment : BaseFragment() {
             }
         }
     }
+
+    private fun handleAddressSearch(searchQuery: String) {
+        if (isValidSearchAddress(searchQuery)) {
+            weatherViewModel.getLocationFromAddress(searchQuery)
+        }
+    }
+
+    private fun isValidSearchAddress(searchQuery: String) =
+        searchQuery.isNotEmpty() && searchQuery.length > 3
 }
