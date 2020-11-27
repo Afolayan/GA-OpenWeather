@@ -25,6 +25,8 @@ class WeatherViewModel @Inject constructor(
     private val _weatherForecastLiveData = MutableLiveData<Resource<FullWeeklyData>>()
     val weatherForecastLiveData = _weatherForecastLiveData
 
+    var coordinateAddress: String? = null
+
     fun fetchWeatherBy(coordinates: Coordinates) {
         addDisposable(
             fetchWeatherForecastUseCase.fetchWeatherForecast(

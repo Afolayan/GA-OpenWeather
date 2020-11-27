@@ -47,6 +47,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$collapsing_toolbar"
+
+    implementation "com.google.android.gms:play-services-location:$play_service"
 
     // dagger core
     implementation "com.google.dagger:dagger:$dagger_2_version"

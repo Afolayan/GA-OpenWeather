@@ -31,12 +31,14 @@ open class CurrentWeather(
     }
 
     fun toCurrentWeatherUI() = CurrentWeatherUI(
+        date = date,
         name = name,
         temperature = temperature,
         feelsLike = feelsLike,
         wind = wind_speed,
         uvIndex = uvi,
-        humidity = humidity
-
+        humidity = humidity,
+        icon = weather?.get(0)?.icon,
+        description = weather?.get(0)?.description
     )
 }

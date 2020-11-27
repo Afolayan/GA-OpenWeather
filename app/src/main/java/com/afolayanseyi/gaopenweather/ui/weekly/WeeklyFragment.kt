@@ -6,32 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentWeeklyBinding
 import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
-import com.afolayanseyi.gaopenweather.ui.WeatherViewModel
-import com.afolayanseyi.gaopenweather.ui.WeatherViewModelFactory
-import javax.inject.Inject
+import com.afolayanseyi.gaopenweather.ui.BaseFragment
 
-class WeeklyFragment : Fragment() {
+class WeeklyFragment : BaseFragment() {
 
     private var _binding: FragmentWeeklyBinding? = null
 
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var viewModelFactory: WeatherViewModelFactory
-
-    private val weatherViewModel: WeatherViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            viewModelFactory
-        ).get(WeatherViewModel::class.java)
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

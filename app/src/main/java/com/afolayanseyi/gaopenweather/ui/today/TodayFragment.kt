@@ -1,35 +1,25 @@
 package com.afolayanseyi.gaopenweather.ui.today
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import android.view.*
 import com.afolayanseyi.gaopenweather.OpenWeatherApplication
+import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentTodayBinding
 import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
-import com.afolayanseyi.gaopenweather.model.Coordinates
-import com.afolayanseyi.gaopenweather.ui.WeatherViewModel
-import com.afolayanseyi.gaopenweather.ui.WeatherViewModelFactory
-import javax.inject.Inject
+import com.afolayanseyi.gaopenweather.extensions.gone
+import com.afolayanseyi.gaopenweather.extensions.visible
+import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
+import com.afolayanseyi.gaopenweather.ui.BaseFragment
+import kotlinx.android.synthetic.main.fragment_today.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class TodayFragment : Fragment() {
+
+class TodayFragment : BaseFragment() {
 
     private var _binding: FragmentTodayBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var viewModelFactory: WeatherViewModelFactory
-
-    private val weatherViewModel: WeatherViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            viewModelFactory
-        ).get(WeatherViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,14 +39,22 @@ class TodayFragment : Fragment() {
             resource?.let {
                 when (it.state) {
                     ResourceState.LOADING -> {
-                        Log.e("TODAY", "loading")
+                        progress_circular.visible()
                     }
                     ResourceState.SUCCESS -> {
-                        Log.e("TODAY", "on success ${it.data}")
+                        progress_circular.gone()
+                        presentView(it.data)
                     }
 
                     ResourceState.ERROR -> {
-                        Log.e("TODAY", "on error ${it.exception}")
+                        progress_circular.gone()
+                        text_error.apply {
+                            visible()
+                            text = it.exception?.message
+                        }
+                        presentErrorDialog("Error", it.exception?.message) {
+                            fetchLocation()
+                        }
                     }
                 }
             }
@@ -68,10 +66,57 @@ class TodayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        weatherViewModel.fetchWeatherBy(Coordinates(0.0, 0.0))
+        //_binding?.toolbar.action
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun presentView(data: CurrentWeatherUI?) {
+        data?.let { currentWeather ->
+            layout_header_view.visible()
+            layout_weather_info.visible()
+
+            text_view_date.text =
+                SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
+                    .format(Date(currentWeather.date))
+            text_view_weather_description.text = currentWeather.description?.capitalize()
+            currentWeather.icon?.let {
+                imageLoader.loadImage(getIconUrl(it), image_view_weather_icon)
+            }
+            text_view_place_name.text = weatherViewModel.coordinateAddress
+            text_view_temperature.text = currentWeather.temperature?.toInt()?.toString()
+            text_view_feels_like_value.text =
+                getString(
+                    R.string.text_temp_celcius,
+                    currentWeather.feelsLike?.toInt()?.toString()
+                )
+            text_view_wind_value.text =
+                getString(
+                    R.string.text_wind_speed,
+                    currentWeather.wind?.toString()
+                )
+            text_view_humidity_value.text = currentWeather.humidity?.toString()?.plus("%")
+            text_view_uv_value.text = currentWeather.uvIndex?.toInt()?.toString()
+        } ?: kotlin.run {
+            text_error.apply {
+                visible()
+                text = getString(R.string.error_message)
+            }
+        }
     }
 }

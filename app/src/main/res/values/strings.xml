@@ -4,4 +4,15 @@
     <string name="title_weekly">Weekly</string>
     <string name="title_share">Share</string>
     <string name="base_url">https://api.openweathermap.org/data/2.5/</string>
+    <string name="menu_search">Search</string>
+    <string name="text_celsius">\u2103</string>
+    <string name="text_temp_celcius">%s\u2103</string>
+    <string name="text_wind_speed">%skm/hr</string>
+    <string name="text_humidity_value">%s%</string>
+    <string name="title_feels_like">Feels like</string>
+    <string name="title_humidity">Humidity</string>
+    <string name="title_wind">Wind</string>
+    <string name="title_uv_index">UV Index</string>
+    <string name="error_message">Error fetching weather data</string>
+    <string name="today">Today</string>
 </resources>

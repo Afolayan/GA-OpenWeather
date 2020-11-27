@@ -36,7 +36,7 @@ data class WeatherData(
     }
 
     fun toFullWeeklyData(): FullWeeklyData {
-        val weeklyData: MutableList<WeeklyData> = mutableListOf()
+        val weeklyData: MutableList<WeekDay> = mutableListOf()
         daily?.forEach {
             weeklyData.add(it.toWeeklyData())
         }

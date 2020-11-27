@@ -23,15 +23,16 @@ data class DailyData(
     var temp: Temp? = null
 ) {
 
-    fun toWeeklyData(): WeeklyData {
-        val weeklyData = WeeklyData(
+    fun toWeeklyData(): WeekDay {
+        val weeklyData = WeekDay(
             date = date,
             minTemp = temp?.min,
             maxTemp = temp?.max
         )
         var description = ""
         weather?.get(0)?.let {
-            description += it.main
+            weeklyData.icon = it.icon
+                description += it.main
             it.description?.let { desc ->
                 description += ", "
                 description += desc

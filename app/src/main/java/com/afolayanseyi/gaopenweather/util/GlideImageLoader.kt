@@ -14,10 +14,9 @@ class GlideImageLoader : ImageLoader {
             placeholder(R.drawable.ic_cloud_error)
             diskCacheStrategy(DiskCacheStrategy.ALL)
         }
-        val imageUrl = BASE_URL.plus(url)
 
         Glide.with(view)
-            .load(imageUrl)
+            .load(url)
             .apply(options)
             .into(view)
     }

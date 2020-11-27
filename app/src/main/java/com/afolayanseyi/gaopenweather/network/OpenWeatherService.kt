@@ -22,6 +22,7 @@ interface OpenWeatherService {
         @Query(LATITUDE) latitude: Double?,
         @Query(LONGITUDE) longitude: Double?,
         @Query(EXCLUDE) exclude: String?,
-        @Query(APPLICATION_ID) apiKey: String?
+        @Query(APPLICATION_ID) apiKey: String?,
+        @Query("units") units: String? = "metric"
     ): Single<WeatherData>
 }
