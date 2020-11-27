@@ -22,9 +22,12 @@ object LocationUtil {
                 val fetchedAddress = addresses[0]
                 val strAddress = StringBuilder()
                 fetchedAddress?.let {
-                    strAddress.append(fetchedAddress.locality)
-                        .append(", ")
-                        .append(fetchedAddress.countryName)
+                    if (it.locality.isNotEmpty()) {
+                        strAddress.append(it.locality).append(", ")
+                    } else if (it.adminArea.isNotEmpty()) {
+                        strAddress.append(it.adminArea).append(", ")
+                    }
+                    strAddress.append(it.countryName)
                 }
                 Single.just(strAddress.toString())
             } else {
@@ -38,7 +41,7 @@ object LocationUtil {
 
     fun getLocationFromAddress(address: String): Single<LatLng> {
         val geocoder = Geocoder(OpenWeatherApplication.instance)
-        var addresses: List<Address>
+        val addresses: List<Address>
         var latLng: LatLng? = null
 
         try {

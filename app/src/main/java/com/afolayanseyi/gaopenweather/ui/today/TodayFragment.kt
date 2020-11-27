@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
-import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.R
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentTodayBinding
-import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
 import com.afolayanseyi.gaopenweather.extensions.getIconUrl
 import com.afolayanseyi.gaopenweather.extensions.gone
+import com.afolayanseyi.gaopenweather.extensions.inject
 import com.afolayanseyi.gaopenweather.extensions.toFormattedString
 import com.afolayanseyi.gaopenweather.extensions.visible
 import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
@@ -33,10 +32,7 @@ class TodayFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        DaggerAppComponent.builder()
-            .application(OpenWeatherApplication.instance!!)
-            .build()
-            .inject(this)
+        inject()
 
         _binding = FragmentTodayBinding.inflate(inflater, container, false)
         val root: View = binding.root

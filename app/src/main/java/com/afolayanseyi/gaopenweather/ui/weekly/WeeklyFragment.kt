@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.data.ResourceState
 import com.afolayanseyi.gaopenweather.databinding.FragmentWeeklyBinding
-import com.afolayanseyi.gaopenweather.di.DaggerAppComponent
 import com.afolayanseyi.gaopenweather.extensions.gone
+import com.afolayanseyi.gaopenweather.extensions.inject
 import com.afolayanseyi.gaopenweather.extensions.visible
 import com.afolayanseyi.gaopenweather.model.WeatherUIData
 import com.afolayanseyi.gaopenweather.model.WeekDay
@@ -30,10 +29,8 @@ class WeeklyFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        DaggerAppComponent.builder()
-            .application(OpenWeatherApplication.instance!!)
-            .build()
-            .inject(this)
+
+        inject()
 
         _binding = FragmentWeeklyBinding.inflate(inflater, container, false)
         val root: View = binding.root

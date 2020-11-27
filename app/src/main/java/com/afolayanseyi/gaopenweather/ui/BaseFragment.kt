@@ -64,9 +64,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mFusedLocationClient != null) {
-            mFusedLocationClient!!.removeLocationUpdates(locationCallback);
-        }
+        mFusedLocationClient?.removeLocationUpdates(locationCallback)
     }
 
     override fun onRequestPermissionsResult(

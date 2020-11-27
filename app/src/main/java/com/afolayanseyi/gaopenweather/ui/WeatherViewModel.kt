@@ -1,8 +1,6 @@
 package com.afolayanseyi.gaopenweather.ui
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.data.Resource
 import com.afolayanseyi.gaopenweather.domain.FetchWeatherForecastUseCase
@@ -67,12 +65,10 @@ class WeatherViewModel @Inject constructor(
             )
                 .subscribeOn(appScheduler.io())
                 .observeOn(appScheduler.mainThread())
-                .subscribe({
-                    coordinateAddress = it
-                    addressLiveData.postValue(it)
-                }, {
-
-                })
+                .subscribe { address ->
+                    coordinateAddress = address
+                    addressLiveData.postValue(address)
+                }
         )
     }
 
@@ -95,16 +91,3 @@ class WeatherViewModel @Inject constructor(
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class WeatherViewModelFactory @Inject constructor(
-    private val fetchWeatherForecastUseCase: FetchWeatherForecastUseCase,
-    private val appScheduler: SchedulerInterface
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return WeatherViewModel(
-            fetchWeatherForecastUseCase,
-            appScheduler
-        ) as T
-    }
-}
