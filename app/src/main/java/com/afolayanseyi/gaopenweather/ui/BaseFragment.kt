@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.afolayanseyi.gaopenweather.model.Coordinates
 import com.afolayanseyi.gaopenweather.util.ImageLoader
-import com.afolayanseyi.gaopenweather.util.LocationUtil
 import com.google.android.gms.location.*
 import javax.inject.Inject
 
@@ -134,12 +133,7 @@ abstract class BaseFragment : Fragment() {
 
     private fun processLocation(location: Location) {
         weatherViewModel.fetchWeatherBy(Coordinates(location.latitude, location.longitude))
-        weatherViewModel.coordinateAddress =
-            LocationUtil.getAddressFromLocation(
-                requireContext(),
-                location.latitude,
-                location.longitude
-            )
-    }
+        weatherViewModel.fetchLocationAddress(location.latitude, location.longitude)
+}
 
 }

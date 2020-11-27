@@ -54,6 +54,10 @@ class WeeklyFragment : BaseFragment() {
             }
         })
 
+        weatherViewModel.addressLiveData.observe(viewLifecycleOwner, {
+            text_view_place_name.text = it
+        })
+
         return root
     }
 
@@ -66,7 +70,6 @@ class WeeklyFragment : BaseFragment() {
                 weeklyData.currentWeatherUI?.icon?.let {
                     imageLoader.loadImage(getIconUrl(it), image_view_weather_icon)
                 }
-                text_view_place_name.text = weatherViewModel.coordinateAddress
                 text_view_temperature.text = currentWeather.temperature?.toInt()?.toString()
             }
             recycler_view.apply {

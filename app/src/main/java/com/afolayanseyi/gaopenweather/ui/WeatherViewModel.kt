@@ -3,6 +3,7 @@ package com.afolayanseyi.gaopenweather.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.afolayanseyi.gaopenweather.OpenWeatherApplication
 import com.afolayanseyi.gaopenweather.data.Resource
 import com.afolayanseyi.gaopenweather.domain.FetchWeatherForecastUseCase
 import com.afolayanseyi.gaopenweather.extensions.setError
@@ -11,6 +12,7 @@ import com.afolayanseyi.gaopenweather.extensions.setSuccess
 import com.afolayanseyi.gaopenweather.model.Coordinates
 import com.afolayanseyi.gaopenweather.model.CurrentWeatherUI
 import com.afolayanseyi.gaopenweather.model.FullWeeklyData
+import com.afolayanseyi.gaopenweather.util.LocationUtil
 import com.afolayanseyi.gaopenweather.util.SchedulerInterface
 import javax.inject.Inject
 
@@ -24,6 +26,7 @@ class WeatherViewModel @Inject constructor(
 
     private val _weatherForecastLiveData = MutableLiveData<Resource<FullWeeklyData>>()
     val weatherForecastLiveData = _weatherForecastLiveData
+    val addressLiveData = MutableLiveData<String>()
 
     var coordinateAddress: String? = null
 
@@ -52,6 +55,21 @@ class WeatherViewModel @Inject constructor(
         )
     }
 
+    fun fetchLocationAddress(latitude: Double, longitude: Double) {
+        addDisposable(
+            LocationUtil.getAddressFromLocation(
+                OpenWeatherApplication.instance!!,
+                latitude, longitude
+            )
+                .subscribeOn(appScheduler.io())
+                .observeOn(appScheduler.mainThread())
+                .subscribe({
+                    addressLiveData.postValue(it)
+                }, {
+
+                })
+        )
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

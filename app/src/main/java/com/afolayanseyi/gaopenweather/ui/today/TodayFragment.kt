@@ -64,6 +64,10 @@ class TodayFragment : BaseFragment() {
             }
         })
 
+        weatherViewModel.addressLiveData.observe(viewLifecycleOwner, {
+            text_view_place_name.text = it
+        })
+
         return root
     }
 
@@ -100,7 +104,6 @@ class TodayFragment : BaseFragment() {
             currentWeather.icon?.let {
                 imageLoader.loadImage(getIconUrl(it), image_view_weather_icon)
             }
-            text_view_place_name.text = weatherViewModel.coordinateAddress
             text_view_temperature.text = currentWeather.temperature?.toInt()?.toString()
             text_view_feels_like_value.text =
                 getString(
